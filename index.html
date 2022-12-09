@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" type="image/png" sizes="32x32" href="img/icon32.png">
+    <link rel="icon" type="image/png" sizes="114x114" href="img/icon114.png">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="apple-touch-icon" href="img/icon57.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="img/icon72.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="img/icon114.png" />
+
+    <title>Определение класса зоны по ПУЭ</title>
+
+    <link rel="stylesheet" href="w3.css">
+    <script src="js/divs.js"></script>
+    <script src="js/controller.js"></script>
+</head>
+
+<body>
+    <div class="w3-container w3-round w3-margin w3-teal w3-center">
+        <h3>Определение класса зоны по ПУЭ</h3>
+    </div>
+
+    <div id="divSubstance" class="w3-container w3-padding">
+        <p class="w3-large" style="margin: 0; padding: 0;"><u>Обращающиеся вещества и материалы:</u></p>
+        <p style="margin: 0; padding: 0;">
+            <input id="rbГаз" class="w3-radio" type="radio" name="substance" value="Газ" onchange="OnSubstanceChange()">
+            <label>горючий газ</label>
+        </p>
+        <p style="margin: 0; padding: 0;">
+            <input id="rbЛВЖ" class="w3-radio" type="radio" name="substance" value="ЛВЖ" onchange="OnSubstanceChange()">
+            <label>легковоспламеняющаяся жидкость</label>
+        </p>
+        <p style="margin: 0; padding: 0;">
+            <input id="rbГЖ" class="w3-radio" type="radio" name="substance" value="ГЖ" onchange="OnSubstanceChange()">
+            <label>горючая жидкость</label>
+        </p>
+        <p style="margin: 0; padding: 0;">
+            <input id="rbВзрПыль" class="w3-radio" type="radio" name="substance" value="ВзрПыль" onchange="OnSubstanceChange()">
+            <label>пыли или волокна с НКПВ<=65</label>
+        </p>
+        <p style="margin: 0; padding: 0;">
+            <input id="rbПожПыль" class="w3-radio" type="radio" name="substance" value="ПожПыль" onchange="OnSubstanceChange()">
+            <label>пыли или волокна с НКПВ>65</label>
+        </p>
+        <p style="margin: 0; padding: 0;">
+            <input id="rbТГМ" class="w3-radio" type="radio" name="substance" value="ТГМ" onchange="OnSubstanceChange()">
+            <label>твердые горючие вещества и материалы</label>
+        </p>
+    </div>
+
+    <div id="divZoneInRoom" class="w3-container w3-padding" hidden>
+        <p class="w3-large" style="margin: 0; padding: 0;"><u>Зона расположена:</u></p>
+        <p style="margin: 0; padding: 0;">
+            <input id="rbВПомещении" class="w3-radio" type="radio" name="zoneInRoom" onchange="OnZoneInRoomChange()">
+            <label>в помещении</label>
+        </p>
+        <p style="margin: 0; padding: 0;">
+            <input id="rbВнеПомещения" class="w3-radio" type="radio" name="zoneInRoom" onchange="OnZoneInRoomChange()">
+            <label>вне помещения</label>
+        </p>
+    </div>
+
+    <div id="divCloudInNormal" class="w3-container w3-padding" hidden>
+        <p class="w3-large" style="margin: 0; padding: 0;"><u>Взрывоопасная смесь образуется:</u></p>
+        <p style="margin: 0; padding: 0;">
+            <input id="rbПриНормРаботе" class="w3-radio" type="radio" name="cloudInNormal" onchange="OnCloudInNormalChange()">
+            <label>при нормальной работе</label>
+        </p>
+        <p style="margin: 0; padding: 0;">
+            <input id="rbПриАварии" class="w3-radio" type="radio" name="cloudInNormal" onchange="OnCloudInNormalChange()">
+            <label>только при аварии или нарушениях технологического процесса</label>
+        </p>
+    </div>
+
+    <div id="divRoomFeature" class="w3-container w3-padding" hidden>
+        <p class="w3-large" style="margin: 0; padding: 0;"><u>Наличие особенностей:</u></p>
+        <p style="margin: 0; padding: 0;">
+            <input id="rbАммиак" class="w3-radio" type="radio" name="roomFeature" value="true" onchange="OnRoomFeatureChange()">
+            <label>вещество обладает резким запахом и НКПВ>=15% (например, аммиак)</label>
+        </p>
+        <p style="margin: 0; padding: 0;">
+            <input id="rbВодород" class="w3-radio" type="radio" name="roomFeature" value="true" onchange="OnRoomFeatureChange()">
+            <label>обращается газообразный водород и объем в.о.с. < 5% объема помещения</label>
+        </p>
+        <p style="margin: 0; padding: 0;">
+            <input id="rbЛаборатория" class="w3-radio" type="radio" name="roomFeature" value="true" onchange="OnRoomFeatureChange()">
+            <label>вещества применяются в малых количествах (например, лаборатории)</label>
+        </p>
+        <p style="margin: 0; padding: 0;">
+            <input id="rbNoFeature" class="w3-radio" type="radio" name="roomFeature" value="false" onchange="OnRoomFeatureChange()">
+            <label>нет особенностей</label>
+        </p>
+    </div>
+
+    <div id="divResult" class="w3-card-4 w3-margin w3-round w3-pale-yellow w3-padding w3-large"></div>
+
+    <div class="w3-blue-gray w3-padding w3-tiny">
+        <a class="w3-hover-blue" target="_blank" href="https://www.elec.ru/library/direction/pue.html">Правила
+            устройства электроустановок</a>
+        <p class="w3-right-align">© Уральский институт ГПС МЧС России, 2022</p>
+    </div>
+</body>
+
+</html>
